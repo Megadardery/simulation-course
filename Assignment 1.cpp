@@ -10,12 +10,19 @@ char HIST = 219;
 
 const int nFREQ_C1 = 5, nFREQ_C2 = 21, nFREQ_X = 30, nFREQ_P = 35;
 
-int freq_c1[nFREQ_C1], const C1_OFF = 43;
-int freq_c2[nFREQ_C2], const C2_OFF = 80;
-int freq_x[nFREQ_X], const X_FACT = 1000;
-int freq_p[nFREQ_P], const P_OFF = -10, const P_FACT = 100000;
+int freq_c1[nFREQ_C1];
+const int C1_OFF = 43;
 
-void drawHistogram(ostream& out, int freq[], int n, int off = 0, int factor = 1, int max_width = 50);
+int freq_c2[nFREQ_C2];
+const int C2_OFF = 80;
+
+int freq_x[nFREQ_X];
+const int X_FACT = 1000;
+
+int freq_p[nFREQ_P];
+const int P_OFF = -10, P_FACT = 100000;
+
+void drawHistogram(ostream& out, int freq[], int n, int off = 0, int factor = 1, int max_width = 70);
 
 int main() {
 	char resp;
@@ -137,12 +144,15 @@ void drawHistogram(ostream& out, int freq[], int n, int off, int factor, int max
 	for (int i = 0; i < n; i++) {
 		mx = max(mx, freq[i]);
 	}
-	if (mx < max_width) max_width = min(max_width, mx * 2);
+	if (mx < max_width)
+		mx = max_width / 2;
 	for (int i = 0; i < n; i++) {
 		sprintf(temp, format, factor * (i + off));
 		out << left << setw(15) << temp;
-
-		for (int j = 0; j < (freq[i] - 1) * max_width / mx; j++) {
+		
+		int en = 1.0 * freq[i] * max_width / mx + 0.5;
+		
+		for (int j = 0; j < en; j++) {
 			out << HIST;
 		}
 		out << endl;
